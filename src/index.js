@@ -4,6 +4,8 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 import '../node_modules/mdb-react-ui-kit/dist/css/mdb.min.css';
+import '../node_modules/select2/dist/css/select2.min.css'
+import '../node_modules/select2/dist/js/select2'
 import Manager from "./Manager";
 
 

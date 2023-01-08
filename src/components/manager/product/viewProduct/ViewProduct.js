@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
-import { SidebarData } from "../sideBarData/SidebarData";
-import "../layout/Manager.css";
+import { SidebarData } from "../../sideBarData/SidebarData";
+import "../../layout/Manager.css";
 import { IconContext } from "react-icons";
 import { toast } from "react-toastify";
 import * as BiIcons from "react-icons/bi";
-import productService from "../../../service/products/productService";
-import Spinner from "../spinner/Spinner";
-import Helper from "../helper/Helper";
+import productService from "../../../../service/products/productService";
+import Spinner from "../../spinner/Spinner";
+import Helper from "../../helper/Helper";
 
-const Product = () => {
+const ViewProduct = () => {
   const [sidebar, setSidebar] = useState(false);
 
   const [state, setState] = useState({
@@ -43,7 +43,6 @@ const Product = () => {
           products: productsRes.data,
           loading: false,
         });
-        console.log(productsRes.data);
       };
       getData();
     } catch (error) {
@@ -141,14 +140,13 @@ const Product = () => {
                 </div>
                 <div className="col-3"></div>
                 <div className="col-3 ">
-                  <button
-                    type="button"
+                  <Link to='/manager/product/add'
                     className="btn btn-dark btn-rounded float-end"
                     data-mdb-ripple-color="dark"
                   >
                     <AiIcons.AiOutlinePlusSquare />
                     &nbsp;Add Product
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -160,7 +158,7 @@ const Product = () => {
                 ) : (
                   products.length > 0 &&
                   products.map((product) => (
-                    <div className="col-3 "  key={product.id}>
+                    <div className="col-3 " key={product.id}>
                       <div className="card" style={{ "boder-radius": "15px" }}>
                         <img
                           src={product.image}
@@ -170,21 +168,21 @@ const Product = () => {
                         />
                         <div className="card-body">
                           <h5 className="list-group-item header">
-                            Title: {product.title}
+                            Title: &nbsp;{product.title}
                           </h5>
                           <ul className="list-group list-group-flush">
                             <li className="list-group-item">
-                              category:
+                              category:&nbsp;
                               {product.category.name}
                             </li>
                             <li className="list-group-item">
-                              Status: {product.status}
+                              Status: &nbsp; {product.status}
                             </li>
                             <li className="list-group-item">
-                              Quantity: {product.quantity}
+                              Quantity:&nbsp; {product.quantity}
                             </li>
                             <li className="list-group-item">
-                              Price:
+                              Price:&nbsp;
                               {Helper.formatNumberVND(product.salesPrice)}
                             </li>
                           </ul>
@@ -211,4 +209,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default ViewProduct;

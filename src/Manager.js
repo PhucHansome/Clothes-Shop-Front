@@ -9,7 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "./assets/css/bootstrap.min.css";
 import "./assets/css/icons.min.css";
 import "./assets/css/app.min.css";
-import Product from "./components/manager/product/Product.js";
+import Product from "./components/manager/product/productList/ProductList.js";
+import AddProduct from "./components/manager/product/addProduct/AddProduct.js";
 
 
 function Manager() {
@@ -22,6 +23,7 @@ function Manager() {
           <Route path="/manager" exact element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/manager/product" element={<Product />} />
+          <Route path="/manager/product/add" element={<AddProduct />} />
           <Route path="/manager/customer" element={<Product />} />
           <Route path="/manager/order" element={<Product />} />
         </Routes>
