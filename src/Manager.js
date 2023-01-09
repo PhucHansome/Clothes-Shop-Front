@@ -11,7 +11,8 @@ import "./assets/css/icons.min.css";
 import "./assets/css/app.min.css";
 import Product from "./components/manager/product/productList/ProductList.js";
 import AddProduct from "./components/manager/product/addProduct/AddProduct.js";
-
+import EditProduct from "./components/manager/product/editProduct/EditProduct"
+import ViewProduct from "./components/manager/product/viewProduct/ViewProduct.js";
 
 function Manager() {
   return (
@@ -24,6 +25,8 @@ function Manager() {
           <Route path="/register" element={<Register />} />
           <Route path="/manager/product" element={<Product />} />
           <Route path="/manager/product/add" element={<AddProduct />} />
+          <Route path="/manager/product/edit/:slugProduct" element={<EditProduct />} />
+          <Route path="/manager/product/view/:slugProduct" element={<ViewProduct />} />
           <Route path="/manager/customer" element={<Product />} />
           <Route path="/manager/order" element={<Product />} />
         </Routes>

@@ -116,11 +116,11 @@ const AddProduct = () => {
   const doCreateProduct = async () => {
     try {
       setState({ ...state, loading: true });
-      if (product.productColor === ""||product.productColor === "0") {
+      if (product.productColor === "" || product.productColor === "0") {
         toast.error("Hãy chọn Màu sắc sản phẩm");
         return;
       }
-      if (product.productSize === "" ||product.productSize === "0" ) {
+      if (product.productSize === "" || product.productSize === "0") {
         toast.error("Hãy chọn Kích thước sản phẩm");
         return;
       }
@@ -129,7 +129,7 @@ const AddProduct = () => {
         return;
       }
 
-      if( product.image === ""){
+      if (product.image === "") {
         toast.error("Hãy chọn ảnh sản phẩm");
         return;
       }
@@ -145,15 +145,11 @@ const AddProduct = () => {
       product.productSize = productSizeRes.data;
       product.category = CategoryRes.data;
 
-      if (product.quantity === 0) {
-        product.status = "Sản phẩm Đã hết hàng";
-      }
-
       if (product.quantity > 0) {
-        product.status = "Sản phẩm Đang chờ lên Kệ";
+        product.status = "Sản phẩm Đã lên Kệ";
       }
 
-      if (product.quantity < 0) {
+      if (product.quantity <= 0) {
         product.status = "Sản phẩm Đã Hết hàng";
       }
       product.slug = product.title
@@ -175,7 +171,7 @@ const AddProduct = () => {
       setState({ ...state, loading: false });
       console.log(productRest.data);
       if (productRest.data) {
-        toast.success("Login successs");
+        toast.success("Add Product Success");
         navigate("/manager/product", { replace: true });
       }
     } catch (error) {
@@ -427,7 +423,7 @@ const AddProduct = () => {
                             onInput={handleInputValue}
                             name="productColor"
                           >
-                            <option value="0" key="0" >
+                            <option value="0" key="0">
                               Select a Product Color
                             </option>
                             {productColorData.map((productColor) => (
@@ -453,7 +449,7 @@ const AddProduct = () => {
                             name="productSize"
                             onInput={handleInputValue}
                           >
-                            <option value="0" key="0" >
+                            <option value="0" key="0">
                               Select a Product Size
                             </option>
                             {productSizeData.map((productSize) => (
@@ -480,14 +476,11 @@ const AddProduct = () => {
                             name="category"
                             onInput={handleInputValue}
                           >
-                            <option value="0" key="0" >
+                            <option value="0" key="0">
                               Select a Category
                             </option>
                             {categoryData.map((category) => (
-                              <option
-                                value={category.id}
-                                key={category.id}
-                              >
+                              <option value={category.id} key={category.id}>
                                 {category.name}
                               </option>
                             ))}
@@ -517,7 +510,7 @@ const AddProduct = () => {
                         </button>
                       </div>
                       <div className="col-3">
-                        {select.uploading  ? (
+                        {select.uploading ? (
                           <button
                             onClick={doCreateProduct}
                             className="btn btn-success float-end"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { SidebarData } from "../../sideBarData/SidebarData";
 import "../../layout/Manager.css";
 import { IconContext } from "react-icons";
@@ -16,6 +16,8 @@ import FileService from "../../../../service/uploadFile/FileService";
 import productService from "../../../../service/products/productService";
 
 const EditProduct = () => {
+  const { slugProduct } = useParams();
+
   const [sidebar, setSidebar] = useState(false);
 
   const [select, setSelect] = useState({
@@ -63,8 +65,24 @@ const EditProduct = () => {
         let categoryRes = await categoryService.getCategory();
         let productColorRes = await productColorService.getproductColor();
         let productSizeRes = await productSizeService.getProductSize();
+        let productRes = await productService.getProductBySlug(slugProduct);
         setState({
           ...state,
+          product: {
+            id: productRes.data.id,
+            code: productRes.data.code,
+            title: productRes.data.title,
+            salesPrice: productRes.data.salesPrice,
+            quantity: productRes.data.quantity,
+            status: productRes.data.status,
+            description: productRes.data.description,
+            slug: productRes.data.slug,
+            entryPrice: productRes.data.entryPrice,
+            image: productRes.data.image,
+            category: productRes.data.category.id,
+            productColor: productRes.data.productColor.id,
+            productSize: productRes.data.productSize.id,
+          },
           categoryData: categoryRes.data,
           productColorData: productColorRes.data,
           productSizeData: productSizeRes.data,
@@ -113,43 +131,46 @@ const EditProduct = () => {
     }
   };
 
-  const doCreateProduct = async () => {
+  const doEditProduct = async () => {
     try {
       setState({ ...state, loading: true });
-      if (product.productColor === ""||product.productColor === "0") {
+      if (product.productColor === "" || product.productColor === "0") {
         toast.error("Hãy chọn Màu sắc sản phẩm");
         return;
       }
-      if (product.productSize === "" ||product.productSize === "0" ) {
+
+      if (product.productSize === "" || product.productSize === "0") {
         toast.error("Hãy chọn Kích thước sản phẩm");
         return;
       }
+
       if (product.category === "" || product.productSize === "0") {
         toast.error("Hãy chọn Thể loại sản phẩm");
         return;
       }
+
       let productColorRes = await productColorService.getproductColorById(
         product.productColor
       );
+
       let productSizeRes = await productSizeService.getProductSizeById(
         product.productSize
       );
+
       let CategoryRes = await categoryService.getCategoryById(product.category);
+
       product.productColor = productColorRes.data;
       product.productSize = productSizeRes.data;
       product.category = CategoryRes.data;
 
-      if (product.quantity === 0) {
-        product.status = "Sản phẩm Đã hết hàng";
-      }
-
       if (product.quantity > 0) {
-        product.status = "Sản phẩm Đang chờ lên Kệ";
+        product.status = "Sản phẩm Đã lên Kệ";
       }
 
-      if (product.quantity < 0) {
+      if (product.quantity <= 0) {
         product.status = "Sản phẩm Đã Hết hàng";
       }
+
       product.slug = product.title
         .toLowerCase()
         .trim()
@@ -165,11 +186,11 @@ const EditProduct = () => {
         .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/, "u")
         .replace(/ý|ỳ|ỷ|ỹ|ỵ/, "y")
         .replace(/đ/, "d");
-      let productRest = await productService.doCreateProduct(product);
+      let productRest = await productService.editProduct(product);
       setState({ ...state, loading: false });
       console.log(productRest.data);
       if (productRest.data) {
-        toast.success("Login successs");
+        toast.success("Edit Product Success");
         navigate("/manager/product", { replace: true });
       }
     } catch (error) {}
@@ -295,6 +316,7 @@ const EditProduct = () => {
                             name="title"
                             type="text"
                             id="form12"
+                            value={product.title}
                             className="form-control"
                           />
                         </div>
@@ -310,6 +332,7 @@ const EditProduct = () => {
                             name="code"
                             type="text"
                             id="form12"
+                            value={product.code}
                             className="form-control"
                           />
                         </div>
@@ -327,6 +350,7 @@ const EditProduct = () => {
                             name="quantity"
                             type="text"
                             id="form12"
+                            value={product.quantity}
                             className="form-control"
                           />
                         </div>
@@ -342,6 +366,7 @@ const EditProduct = () => {
                             name="entryPrice"
                             type="number"
                             id="form12"
+                            value={product.entryPrice}
                             className="form-control"
                           />
                         </div>
@@ -359,6 +384,7 @@ const EditProduct = () => {
                             name="salesPrice"
                             type="number"
                             id="form12"
+                            value={product.salesPrice}
                             className="form-control"
                           />
                         </div>
@@ -417,8 +443,9 @@ const EditProduct = () => {
                             className="select-css"
                             onInput={handleInputValue}
                             name="productColor"
+                            value={product.productColor}
                           >
-                            <option value="0" key="0" >
+                            <option value="0" key="0">
                               Select a Product Color
                             </option>
                             {productColorData.map((productColor) => (
@@ -443,8 +470,9 @@ const EditProduct = () => {
                             className="select-css"
                             name="productSize"
                             onInput={handleInputValue}
+                            value={product.productSize}
                           >
-                            <option value="0" key="0" >
+                            <option value="0" key="0">
                               Select a Product Size
                             </option>
                             {productSizeData.map((productSize) => (
@@ -470,15 +498,13 @@ const EditProduct = () => {
                             className="select-css"
                             name="category"
                             onInput={handleInputValue}
+                            value={product.category}
                           >
-                            <option value="0" key="0" >
+                            <option value="0" key="0">
                               Select a Category
                             </option>
                             {categoryData.map((category) => (
-                              <option
-                                value={category.id}
-                                key={category.id}
-                              >
+                              <option value={category.id} key={category.id}>
                                 {category.name}
                               </option>
                             ))}
@@ -496,6 +522,7 @@ const EditProduct = () => {
                             name="description"
                             type="text"
                             id="form12"
+                            value={product.description}
                             className="form-control"
                           />
                         </div>
@@ -510,18 +537,18 @@ const EditProduct = () => {
                       <div className="col-3">
                         {select.uploading ? (
                           <button
-                            onClick={doCreateProduct}
+                            onClick={doEditProduct}
                             className="btn btn-success float-end"
                             disabled
                           >
-                            Add Product
+                            Edit Product
                           </button>
                         ) : (
                           <button
-                            onClick={doCreateProduct}
+                            onClick={doEditProduct}
                             className="btn btn-success float-end"
                           >
-                            Add Product
+                            Edit Product
                           </button>
                         )}
                       </div>

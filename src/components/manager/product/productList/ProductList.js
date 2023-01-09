@@ -6,10 +6,13 @@ import { SidebarData } from "../../sideBarData/SidebarData";
 import "../../layout/Manager.css";
 import { IconContext } from "react-icons";
 import { toast } from "react-toastify";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import * as BiIcons from "react-icons/bi";
 import productService from "../../../../service/products/productService";
 import Spinner from "../../spinner/Spinner";
 import Helper from "../../helper/Helper";
+import "../../../../../node_modules/react-confirm-alert/src/react-confirm-alert.css";
 
 const Product = () => {
   const [sidebar, setSidebar] = useState(false);
@@ -53,6 +56,43 @@ const Product = () => {
       });
     }
   }, []);
+
+  const handleRemoveProduct = (id) => {
+    confirmAlert({
+      title: "Remove Product",
+      message: "Are You Sure?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            try {
+              async function removeData() {
+                setState({ ...state, loading: true });
+                let deleteResult = await productService.removeProduct(id);
+                let productRes = await productService.getProduct();
+                setState({
+                  ...state,
+                  products: productRes.data,
+                });
+                toast.success("Product removed success.");
+              }
+              removeData();
+            } catch (error) {
+              toast.error(error.message);
+              setState({
+                ...state,
+                loading: false,
+                errorMessage: error.message,
+              });
+            }
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
+  };
 
   const { loading, products, errorMessage } = state;
   return (
@@ -140,7 +180,8 @@ const Product = () => {
                 </div>
                 <div className="col-3"></div>
                 <div className="col-3 ">
-                  <Link to='/manager/product/add'
+                  <Link
+                    to="/manager/product/add"
                     className="btn btn-dark btn-rounded float-end"
                     data-mdb-ripple-color="dark"
                   >
@@ -159,13 +200,22 @@ const Product = () => {
                   products.length > 0 &&
                   products.map((product) => (
                     <div className="col-3 " key={product.id}>
-                      <div className="card" style={{ "boderRadius": "15px" }}>
-                        <img
-                          src={product.image}
-                          height="350px"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div className="card" style={{ boderRadius: "15px" }}>
+                        <div>
+                          <button
+                            className="Iconx float-end btn btn-danger fs-5"
+                            onClick={() => handleRemoveProduct(product.id)}
+                            
+                          >
+                            <BiIcons.BiX />
+                          </button>
+                          <img
+                            src={product.image}
+                            height="350px"
+                            className="card-img-top"
+                            alt="..."
+                          />
+                        </div>
                         <div className="card-body">
                           <h5 className="list-group-item header">
                             Title: &nbsp;{product.title}
@@ -189,12 +239,18 @@ const Product = () => {
                         </div>
 
                         <div className="card-body ">
-                          <button className="btn btn-success float-start">
+                          <Link
+                            to={`/manager/product/view/${product.slug}`}
+                            className="btn btn-warning float-start"
+                          >
                             View
-                          </button>
-                          <button href="#" className="btn btn-danger float-end">
-                            Remove
-                          </button>
+                          </Link>
+                          <Link
+                            to={`/manager/product/edit/${product.slug}`}
+                            className="btn btn-success float-end"
+                          >
+                            Edit
+                          </Link>
                         </div>
                       </div>
                     </div>
