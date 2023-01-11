@@ -17,6 +17,8 @@ import "../../../../../node_modules/react-confirm-alert/src/react-confirm-alert.
 const Product = () => {
   const [sidebar, setSidebar] = useState(false);
 
+  const [key, setKey] = useState("");
+
   const [state, setState] = useState({
     loading: false,
     products: [],
@@ -94,6 +96,36 @@ const Product = () => {
     });
   };
 
+  const handleSearch = (e) => {
+    setState({ ...state, loading: false });
+    let idSearch = document.getElementById("search-focus");
+    if (idSearch.value.length > 0) {
+      async function getData() {
+        let resData = await productService.getProduct();
+        setState({
+          ...state,
+          products: resData.data.filter((product) =>
+            product.title.toLowerCase().includes(key.toLocaleLowerCase())
+          ),
+          loading: false,
+        });
+      }
+      getData();
+    }
+    if (idSearch.value.length === 0) {
+      async function data() {
+        let resData = await productService.getProduct();
+        setState({
+          ...state,
+          products: resData.data,
+          loading: false,
+        });
+        console.log(resData.data);
+      }
+      data();
+    }
+  };
+
   const { loading, products, errorMessage } = state;
   return (
     <>
@@ -156,8 +188,8 @@ const Product = () => {
               <div className="row">
                 <div className="col-2">
                   <span>
-                    Product<span>/</span>
-                    <span>Product</span>
+                    Products<span>/</span>
+                    <span>Products</span>
                   </span>
                 </div>
                 <div className="col-1"></div>
@@ -168,12 +200,17 @@ const Product = () => {
                         id="search-focus"
                         type="search"
                         className="form-control"
+                        onInput={(e) => setKey(e.target.value)}
                       />
                       <label className="form-label" htmlFor="form1">
                         Search
                       </label>
                     </div>
-                    <button type="button" className="btn btn-primary">
+                    <button
+                      onClick={handleSearch}
+                      type="button"
+                      className="btn btn-primary"
+                    >
                       <i className="fas fa-search" />
                     </button>
                   </div>
@@ -205,7 +242,6 @@ const Product = () => {
                           <button
                             className="Iconx float-end btn btn-danger fs-5"
                             onClick={() => handleRemoveProduct(product.id)}
-                            
                           >
                             <BiIcons.BiX />
                           </button>

@@ -106,8 +106,9 @@ span {
   border-top: none;
   border-left: none;
   border-right: none;
-  padding-left: 37px;
+  padding-right: 37px;
   color: black;
+  padding-top: 15px;
 }
 
 .active-nav a {
