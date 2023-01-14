@@ -99,7 +99,9 @@ const Product = () => {
   const handleSearch = (e) => {
     setState({ ...state, loading: false });
     let idSearch = document.getElementById("search-focus");
-    if (idSearch.value.length > 0) {
+    let valueBackData = document.getElementById("valueBackData");
+
+    if (idSearch.value.length > 2) {
       async function getData() {
         let resData = await productService.getProduct();
         setState({
@@ -109,9 +111,24 @@ const Product = () => {
           ),
           loading: false,
         });
+        if (valueBackData.firstElementChild) {
+          valueBackData.removeChild(valueBackData.firstElementChild);
+        }
       }
       getData();
     }
+
+    if (idSearch.value.length <= 2) {
+      if (valueBackData.firstElementChild) {
+        valueBackData.removeChild(valueBackData.firstElementChild);
+      }
+      let node = document.createElement("span");
+      let str = document.createTextNode("Nhập từ 2 ký tự trở lên!!");
+      node.appendChild(str);
+      valueBackData.appendChild(node).setAttribute("class", "text-secondary-emphasis");
+
+    }
+
     if (idSearch.value.length === 0) {
       async function data() {
         let resData = await productService.getProduct();
@@ -121,6 +138,13 @@ const Product = () => {
           loading: false,
         });
         console.log(resData.data);
+        if (valueBackData.firstElementChild) {
+          valueBackData.removeChild(valueBackData.firstElementChild);
+        }
+        let node = document.createElement("span");
+        let str = document.createTextNode("Hãy nhập tên sản phẩm!");
+        node.appendChild(str);
+        valueBackData.appendChild(node).setAttribute("class", "text-danger");
       }
       data();
     }
@@ -193,29 +217,32 @@ const Product = () => {
                   </span>
                 </div>
                 <div className="col-1"></div>
-                <div className="col-3">
-                  <div className="input-group">
-                    <div className="form-outline">
-                      <input
-                        id="search-focus"
-                        type="search"
-                        className="form-control"
-                        onInput={(e) => setKey(e.target.value)}
-                      />
-                      <label className="form-label" htmlFor="form1">
-                        Search
-                      </label>
+                <div className="col-4">
+                  <div className="row">
+                    <div className="input-group">
+                      <div className="form-outline">
+                        <input
+                          id="search-focus"
+                          type="search"
+                          className="form-control"
+                          onInput={(e) => setKey(e.target.value)}
+                          placeholder="Search"
+                        />
+                      </div>
+                      <button
+                        onClick={handleSearch}
+                        type="button"
+                        className="btn btn-primary"
+                      >
+                        <i className="fas fa-search" />
+                      </button>
                     </div>
-                    <button
-                      onClick={handleSearch}
-                      type="button"
-                      className="btn btn-primary"
-                    >
-                      <i className="fas fa-search" />
-                    </button>
+                  </div>
+                  <div className="row mt-2">
+                    <label id="valueBackData"></label>
                   </div>
                 </div>
-                <div className="col-3"></div>
+                <div className="col-2"></div>
                 <div className="col-3 ">
                   <Link
                     to="/manager/product/add"
@@ -292,6 +319,9 @@ const Product = () => {
                     </div>
                   ))
                 )}
+              </div>
+              <div className="row mt-2">
+                <div className="text-center"></div>
               </div>
             </div>
           </div>
