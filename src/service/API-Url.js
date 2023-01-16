@@ -6,5 +6,6 @@ class App{
     static BASE_URL_PRODUCTCOLOR = this.DOMAIN_API + '/api/product-color'
     static BASE_URL_PRODUCTIMAGE = this.DOMAIN_API + '/api/product-image'
     static BASE_URL_PRODUCTSIZE = this.DOMAIN_API + '/api/product-size'
+    static BASE_URL_CUSTOMER_INFO = this.DOMAIN_API + '/api/customer-info'
 }
 module.exports = App;

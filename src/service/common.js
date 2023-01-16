@@ -10,7 +10,8 @@ const Page = {
     product : App.BASE_URL_PRODUCT,
     product_size: App.BASE_URL_PRODUCTSIZE,
     product_color : App.BASE_URL_PRODUCTCOLOR,
-    product_image : App.BASE_URL_PRODUCTIMAGE
+    product_image : App.BASE_URL_PRODUCTIMAGE,
+    customer_info : App.BASE_URL_CUSTOMER_INFO
   },
   elements: {},
   loadData: {},

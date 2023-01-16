@@ -13,6 +13,10 @@ import Product from "./components/manager/product/productList/ProductList.js";
 import AddProduct from "./components/manager/product/addProduct/AddProduct.js";
 import EditProduct from "./components/manager/product/editProduct/EditProduct"
 import ViewProduct from "./components/manager/product/viewProduct/ViewProduct.js";
+import CustomerList from "./components/manager/customer/customerList/CustomerList.js";
+import AddCustomer from "./components/manager/customer/addCustomer/AddCustomer.js";
+import EditCustomer from "./components/manager/customer/editCustomer/EditCustomer.js";
+import ViewCustomer from "./components/manager/customer/viewCustomer/ViewCustomer.js";
 
 function Manager() {
   return (
@@ -27,7 +31,10 @@ function Manager() {
           <Route path="/manager/product/add" element={<AddProduct />} />
           <Route path="/manager/product/edit/:slugProduct" element={<EditProduct />} />
           <Route path="/manager/product/view/:slugProduct" element={<ViewProduct />} />
-          <Route path="/manager/customer" element={<Product />} />
+          <Route path="/manager/customer" element={<CustomerList />} />
+          <Route path="/manager/customer/add" element={<AddCustomer />} />
+          <Route path="/manager/customer/edit/:slugCustomer" element={<EditCustomer />} />
+          <Route path="/manager/customer/view/:slugCustomer" element={<ViewCustomer />} />
           <Route path="/manager/order" element={<Product />} />
         </Routes>
       </React.Fragment>

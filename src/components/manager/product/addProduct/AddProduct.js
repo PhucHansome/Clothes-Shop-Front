@@ -3,7 +3,7 @@ import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { SidebarData } from "../../sideBarData/SidebarData";
-import "../../layout/Manager.css";
+import "../../../../assets/css/Manager.css";
 import { IconContext } from "react-icons";
 import { toast } from "react-toastify";
 import * as BiIcons from "react-icons/bi";

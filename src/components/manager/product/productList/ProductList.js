@@ -3,7 +3,7 @@ import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { SidebarData } from "../../sideBarData/SidebarData";
-import "../../layout/Manager.css";
+import "../../../../assets/css/Manager.css";
 import { IconContext } from "react-icons";
 import { toast } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
@@ -16,6 +16,8 @@ import "../../../../../node_modules/react-confirm-alert/src/react-confirm-alert.
 
 const Product = () => {
   const [sidebar, setSidebar] = useState(false);
+
+  const showSidebar = () => setSidebar(!sidebar);
 
   const [key, setKey] = useState("");
 
@@ -36,11 +38,10 @@ const Product = () => {
     }, 1000);
   }
 
-  const showSidebar = () => setSidebar(!sidebar);
-
   useEffect(() => {
     try {
       setState({ ...state, loading: true });
+      // Render Products
       const getData = async () => {
         let productsRes = await productService.getProduct();
         setState({
@@ -59,6 +60,7 @@ const Product = () => {
     }
   }, []);
 
+  // Remove product
   const handleRemoveProduct = (id) => {
     confirmAlert({
       title: "Remove Product",
@@ -96,11 +98,13 @@ const Product = () => {
     });
   };
 
+  // Search Product
   const handleSearch = (e) => {
     setState({ ...state, loading: false });
     let idSearch = document.getElementById("search-focus");
-    let valueBackData = document.getElementById("valueBackData");
+    let contentSearch = document.getElementById("contentSearch");
 
+    // if length character > 2
     if (idSearch.value.length > 2) {
       async function getData() {
         let resData = await productService.getProduct();
@@ -111,24 +115,27 @@ const Product = () => {
           ),
           loading: false,
         });
-        if (valueBackData.firstElementChild) {
-          valueBackData.removeChild(valueBackData.firstElementChild);
+        if (contentSearch.firstElementChild) {
+          contentSearch.removeChild(contentSearch.firstElementChild);
         }
       }
       getData();
     }
 
+    // if length character <= 2
     if (idSearch.value.length <= 2) {
-      if (valueBackData.firstElementChild) {
-        valueBackData.removeChild(valueBackData.firstElementChild);
+      if (contentSearch.firstElementChild) {
+        contentSearch.removeChild(contentSearch.firstElementChild);
       }
-      let node = document.createElement("span");
+      let createElementSpan = document.createElement("span");
       let str = document.createTextNode("Nhập từ 2 ký tự trở lên!!");
-      node.appendChild(str);
-      valueBackData.appendChild(node).setAttribute("class", "text-secondary-emphasis");
-
+      createElementSpan.appendChild(str);
+      contentSearch
+        .appendChild(createElementSpan)
+        .setAttribute("class", "text-secondary-emphasis");
     }
 
+    // if length character === 0
     if (idSearch.value.length === 0) {
       async function data() {
         let resData = await productService.getProduct();
@@ -138,13 +145,15 @@ const Product = () => {
           loading: false,
         });
         console.log(resData.data);
-        if (valueBackData.firstElementChild) {
-          valueBackData.removeChild(valueBackData.firstElementChild);
+        if (contentSearch.firstElementChild) {
+          contentSearch.removeChild(contentSearch.firstElementChild);
         }
-        let node = document.createElement("span");
+        let createElementSpan = document.createElement("span");
         let str = document.createTextNode("Hãy nhập tên sản phẩm!");
-        node.appendChild(str);
-        valueBackData.appendChild(node).setAttribute("class", "text-danger");
+        createElementSpan.appendChild(str);
+        contentSearch
+          .appendChild(createElementSpan)
+          .setAttribute("class", "text-danger");
       }
       data();
     }
@@ -239,7 +248,7 @@ const Product = () => {
                     </div>
                   </div>
                   <div className="row mt-2">
-                    <label id="valueBackData"></label>
+                    <label id="contentSearch"></label>
                   </div>
                 </div>
                 <div className="col-2"></div>

@@ -10,8 +10,8 @@ export const SidebarData = [
     cName: 'nav-text'
   },
   {
-    title: 'Customer',
-    path: '/customer',
+    title: 'Customers',
+    path: '/manager/customer',
     icon: <AiIcons.AiOutlineUser />,
     cName: 'nav-text'
   },

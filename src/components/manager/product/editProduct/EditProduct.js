@@ -3,7 +3,6 @@ import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { SidebarData } from "../../sideBarData/SidebarData";
-import "../../layout/Manager.css";
 import { IconContext } from "react-icons";
 import { toast } from "react-toastify";
 import * as BiIcons from "react-icons/bi";
@@ -14,6 +13,7 @@ import noAvatar from "../../../../assets/images/choice-a-picture/Bán-hàng-on
 import Spinner from "../../spinner/Spinner";
 import FileService from "../../../../service/uploadFile/FileService";
 import productService from "../../../../service/products/productService";
+import "../../../../assets/css/Manager.css";
 
 const EditProduct = () => {
   const { slugProduct } = useParams();

@@ -3,27 +3,16 @@ import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { SidebarData } from "../../sideBarData/SidebarData";
-import "../../layout/Manager.css";
+import "../../../../assets/css/Manager.css";
 import { IconContext } from "react-icons";
 import { toast } from "react-toastify";
 import * as BiIcons from "react-icons/bi";
-import categoryService from "../../../../service/Category/categoryService";
-import productColorService from "../../../../service/productColor/productColorService";
-import productSizeService from "../../../../service/productSize/ProductSizeService";
-import noAvatar from "../../../../assets/images/choice-a-picture/Bán-hàng-online-nên-bán-gì-và-Cách-xây-dựng-mô-hình-kinh-doanh-ít-vốn-lựa-chọn-sản-phẩm.jpg";
-import Spinner from "../../spinner/Spinner";
-import FileService from "../../../../service/uploadFile/FileService";
 import productService from "../../../../service/products/productService";
 
 const ViewProduct = () => {
   const { slugProduct } = useParams();
 
   const [sidebar, setSidebar] = useState(false);
-
-  const [select, setSelect] = useState({
-    uploading: false,
-    file: "",
-  });
 
   const [state, setState] = useState({
     loading: false,

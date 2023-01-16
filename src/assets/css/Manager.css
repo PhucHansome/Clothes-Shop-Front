@@ -191,3 +191,9 @@ body {
   margin: 0;
   border: 1px solid black;
 }
+
+table tbody tr td div p {
+  color: #bbb !important;
+}
+
+

@@ -5,5 +5,6 @@ class Helper {
       currency: "VND",
     }).format(x);
   }
+
 }
 export default Helper;
