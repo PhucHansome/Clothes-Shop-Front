@@ -178,7 +178,7 @@ const CustomerList = () => {
                   <tbody>
                     {loading ? (
                       <tr>
-                        <td>
+                        <td className="text-center">
                           <div>
                             <Spinner />
                           </div>

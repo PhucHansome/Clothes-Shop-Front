@@ -7,5 +7,6 @@ class App{
     static BASE_URL_PRODUCTIMAGE = this.DOMAIN_API + '/api/product-image'
     static BASE_URL_PRODUCTSIZE = this.DOMAIN_API + '/api/product-size'
     static BASE_URL_CUSTOMER_INFO = this.DOMAIN_API + '/api/customer-info'
+    static BASE_URL_LOCATIONREGION = "https://vapi.vnappmob.com/api/province"
 }
 module.exports = App;
