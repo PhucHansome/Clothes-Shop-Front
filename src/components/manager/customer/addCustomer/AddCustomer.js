@@ -92,7 +92,6 @@ const AddCustomer = () => {
 
   const handleChangeLocation = (e) => {
     if (e.target.name === "provinceId") {
-      console.log(locationRegion.provinces);
       locationRegion.provinces.map((province) => {
         if (province.province_id === e.target.value) {
           const getDistricts = async () => {
@@ -112,23 +111,44 @@ const AddCustomer = () => {
               customerInfor: {
                 locationRegion: {
                   provinceId: e.target.value,
-                  provinceName: province.provinceName,
+                  provinceName: province.province_name,
                   districtId: firtsDistrictId,
                   districtName: firtsDistrictName,
                 },
               },
             });
-            console.log(customerInfor)
           };
           getDistricts();
         }
       });
     }
-    // if (e.target.name === "districtId") {
-    //   locationRegion.districts.map((district) => {
-    //     console.log(district);
-    //   });
-    // }
+    if (e.target.name === "districtId") {
+      locationRegion.districts.map((district) => {
+        if (e.target.value === district.district_id) {
+            setCustomerInfo({
+              ...customerInfo,
+              customerInfor: {
+                locationRegion: {
+                  ...customerInfor.locationRegion,
+                  districtId: district.district_id,
+                  districtName: district.district_name,
+                },
+              },
+            });
+        }
+      });
+    }
+    if (e.target.name === "address") {
+      setCustomerInfo({
+        ...customerInfo,
+        customerInfor: {
+          locationRegion: {
+            ...customerInfor.locationRegion,
+            address: e.target.value,
+          },
+        },
+      });
+    }
   };
 
   const { customerInfor, loading } = customerInfo;
