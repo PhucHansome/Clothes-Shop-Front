@@ -13,6 +13,10 @@ class authService {
     return axios.post(Page.urls.postToken)
   }
 
+  static getUserByUserName(userName){
+    return axios.get(Page.urls.getUser+ "/" + userName)
+  }
+
   getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');

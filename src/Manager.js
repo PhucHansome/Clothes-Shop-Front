@@ -33,8 +33,8 @@ function Manager() {
           <Route path="/manager/product/view/:slugProduct" element={<ViewProduct />} />
           <Route path="/manager/customer" element={<CustomerList />} />
           <Route path="/manager/customer/add" element={<AddCustomer />} />
-          <Route path="/manager/customer/edit/:slugCustomer" element={<EditCustomer />} />
-          <Route path="/manager/customer/view/:slugCustomer" element={<ViewCustomer />} />
+          <Route path="/manager/customer/edit/:id" element={<EditCustomer />} />
+          <Route path="/manager/customer/view/:id" element={<ViewCustomer />} />
           <Route path="/manager/order" element={<Product />} />
         </Routes>
       </React.Fragment>

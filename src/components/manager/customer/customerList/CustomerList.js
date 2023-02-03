@@ -55,6 +55,69 @@ const CustomerList = () => {
     } catch (error) {}
   }, []);
 
+  const handleSearch = () => {
+    setState({
+      ...state, 
+      loading: false
+    })
+    let idSearch = document.getElementById("search-focus");
+    let contentSearch = document.getElementById("contentSearch");
+
+    // if length character > 2
+    if (idSearch.value.length > 2) {
+      async function getData() {
+        let resData = await customerInfoService.getCustomerInfo();
+        setState({
+          ...state,
+          customerInfores: resData.data.filter((customer) =>
+          customer.fullName.toLowerCase().includes(key.toLocaleLowerCase())
+          ),
+          loading: false,
+        });
+        if (contentSearch.firstElementChild) {
+          contentSearch.removeChild(contentSearch.firstElementChild);
+        }
+      }
+      getData();
+    }
+
+    // if length character <= 2
+    if (idSearch.value.length <= 2) {
+      if (contentSearch.firstElementChild) {
+        contentSearch.removeChild(contentSearch.firstElementChild);
+      }
+      let createElementSpan = document.createElement("span");
+      let str = document.createTextNode("Nhập từ 2 ký tự trở lên!!");
+      createElementSpan.appendChild(str);
+      contentSearch
+        .appendChild(createElementSpan)
+        .setAttribute("class", "text-secondary-emphasis");
+    }
+
+    // if length character === 0
+    if (idSearch.value.length === 0) {
+      async function data() {
+        let dataCustomers = await customerInfoService.getCustomerInfo();
+        setState({
+          ...state,
+          customerInfores: dataCustomers.data,
+          loading: false,
+        });
+        console.log(dataCustomers.data);
+        if (contentSearch.firstElementChild) {
+          contentSearch.removeChild(contentSearch.firstElementChild);
+        }
+        let createElementSpan = document.createElement("span");
+        let str = document.createTextNode("Hãy nhập tên Khách hàng!");
+        createElementSpan.appendChild(str);
+        contentSearch
+          .appendChild(createElementSpan)
+          .setAttribute("class", "text-danger");
+      }
+      data();
+    }
+  }
+
   const { loading, customerInfores, errorMessage } = state;
   return (
     <>
@@ -130,12 +193,12 @@ const CustomerList = () => {
                           id="search-focus"
                           type="search"
                           className="form-control"
-                          //   onInput={(e) => setKey(e.target.value)}
+                            onInput={(e) => setKey(e.target.value)}
                           placeholder="Search"
                         />
                       </div>
                       <button
-                        // onClick={handleSearch}
+                        onClick={handleSearch}
                         type="button"
                         className="btn btn-primary"
                       >
@@ -170,7 +233,7 @@ const CustomerList = () => {
                       <th>Address</th>
                       <th className="text-center">Phone</th>
                       <th>Debt</th>
-                      <th colSpan={3} className="text-center">
+                      <th colSpan={2} className="text-center">
                         Actions
                       </th>
                     </tr>
@@ -190,27 +253,19 @@ const CustomerList = () => {
                         <tr key={customerInfo.id}>
                           <td className="align-middle">
                             <div className="d-flex align-items-center">
-                              {customerInfo.user.role.id === 1 ? (
-                                <img
-                                  src="https://thumbs.dreamstime.com/b/admin-icon-trendy-design-style-isolated-white-background-vector-simple-modern-flat-symbol-web-site-mobile-logo-app-135742404.jpg"
-                                  alt=""
-                                  style={{ width: "45px", height: "45px" }}
-                                />
-                              ) : (
-                                <img
-                                  src="https://i.pinimg.com/280x280_RS/2e/45/66/2e4566fd829bcf9eb11ccdb5f252b02f.jpg"
-                                  alt=""
-                                  style={{ width: "45px", height: "45px" }}
-                                  className="rounded-circle"
-                                />
-                              )}
+                              <img
+                                src="https://i.pinimg.com/280x280_RS/2e/45/66/2e4566fd829bcf9eb11ccdb5f252b02f.jpg"
+                                alt=""
+                                style={{ width: "45px", height: "45px" }}
+                                className="rounded-circle"
+                              />
 
                               <div className="ms-3">
                                 <p className="fw-bold mb-1">
                                   {customerInfo.fullName}
                                 </p>
                                 <p className="text-muted mb-0">
-                                  {customerInfo.user.username}
+                                  {customerInfo.email}
                                 </p>
                               </div>
                             </div>
@@ -235,29 +290,22 @@ const CustomerList = () => {
                             {customerInfo.debt}
                           </td>
                           <td className="text-center align-middle">
-                            <button
-                              type="button"
+                            <Link 
+                                 to={`/manager/customer/view/${customerInfo.id}`}
                               className="btn btn-warning btn-sm btn-rounded fw-bold"
                             >
                               <AiIcons.AiOutlineUser />
-                            </button>
+                              </Link>
                           </td>
                           <td className="text-center align-middle">
-                            <button
-                              type="button"
+                            <Link 
+                                 to={`/manager/customer/edit/${customerInfo.id}`}
                               className="btn btn-success btn-sm btn-rounded fw-bold"
                             >
                               <FaIcons.FaEdit />
-                            </button>
+                            </Link>
                           </td>
-                          <td className="text-center align-middle">
-                            <button
-                              type="button"
-                              className="btn btn-danger btn-sm btn-rounded fw-bold"
-                            >
-                              <FaIcons.FaBan />
-                            </button>
-                          </td>
+                          
                         </tr>
                       ))
                     )}

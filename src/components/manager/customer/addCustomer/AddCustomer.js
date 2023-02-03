@@ -11,6 +11,7 @@ import * as BiIcons from "react-icons/bi";
 import "../../../../../node_modules/react-confirm-alert/src/react-confirm-alert.css";
 import customerInfoService from "../../../../service/customerInfo/customerInfoService";
 import locationRegionService from "../../../../service/locationRegion/locationRegionService";
+import authService from "../../../../service/auth/authService";
 
 const AddCustomer = () => {
   const [sidebar, setSidebar] = useState(false);
@@ -22,11 +23,11 @@ const AddCustomer = () => {
   const [customerInfo, setCustomerInfo] = useState({
     loading: false,
     customerInfor: {
-      id: 0,
+      id: "",
       user: "",
       fullName: "",
       phone: "",
-      debt: "0",
+      email: localStorage.getItem("username"),
       locationRegion: {
         provinceId: "",
         provinceName: "",
@@ -48,7 +49,7 @@ const AddCustomer = () => {
     provinceId: "92",
   });
 
-  const { provinceId, districtId } = select;
+  const { provinceId } = select;
 
   localStorage.removeItem("registerUsername");
   localStorage.removeItem("registerPass");
@@ -57,7 +58,7 @@ const AddCustomer = () => {
   if (localStorage.length === 0) {
     toast.error("You are not logged in");
     setTimeout(function () {
-      navigate("/manager/login", { replace: true });
+     
     }, 1000);
   }
 
@@ -83,11 +84,10 @@ const AddCustomer = () => {
     setCustomerInfo({
       ...customerInfo,
       customerInfor: {
-        ...customerInfo,
+        ...customerInfor,
         [e.target.name]: e.target.value,
       },
     });
-    console.log(customerInfo);
   };
 
   const handleChangeLocation = (e) => {
@@ -109,7 +109,9 @@ const AddCustomer = () => {
             setCustomerInfo({
               ...customerInfo,
               customerInfor: {
+                ...customerInfor,
                 locationRegion: {
+                  ...customerInfor.locationRegion,
                   provinceId: e.target.value,
                   provinceName: province.province_name,
                   districtId: firtsDistrictId,
@@ -125,23 +127,24 @@ const AddCustomer = () => {
     if (e.target.name === "districtId") {
       locationRegion.districts.map((district) => {
         if (e.target.value === district.district_id) {
-            setCustomerInfo({
-              ...customerInfo,
-              customerInfor: {
-                locationRegion: {
-                  ...customerInfor.locationRegion,
-                  districtId: district.district_id,
-                  districtName: district.district_name,
-                },
+          setCustomerInfo({
+            ...customerInfo,
+            customerInfor: {
+              ...customerInfor,
+              locationRegion: {
+                ...customerInfor.locationRegion,
+                districtId: district.district_id,
+                districtName: district.district_name,
               },
-            });
+            },
+          });
         }
       });
     }
     if (e.target.name === "address") {
       setCustomerInfo({
-        ...customerInfo,
         customerInfor: {
+          ...customerInfor,
           locationRegion: {
             ...customerInfor.locationRegion,
             address: e.target.value,
@@ -151,7 +154,31 @@ const AddCustomer = () => {
     }
   };
 
-  const { customerInfor, loading } = customerInfo;
+  const handleCreateCustomer = () => {
+    try {
+      const doCreateCustomerInfo = async () => {
+        setCustomerInfo({ ...customerInfo, loading: true });
+        
+        console.log(customerInfo.customerInfor);
+        let userAddCustomerInfoRes = await authService.getUserByUserName(localStorage.getItem("username"));
+        customerInfor.user = userAddCustomerInfoRes.data;
+        customerInfor.debt = 0;
+        console.log(customerInfor.user);
+        let customerRest = await customerInfoService.doCreateCustomerInfo(
+          customerInfo.customerInfor
+        );
+        if(customerRest.data){
+          toast.success("Create Customer Success!")
+          navigate("/manager/customer", { replace: true });
+        }
+      };
+      doCreateCustomerInfo();
+    } catch (error) {
+      toast.error("Create Failse! Please Try Again!!")
+    }
+  };
+
+  const { customerInfor } = customerInfo;
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
@@ -254,6 +281,31 @@ const AddCustomer = () => {
                   </div>
                   <div className="col-6">
                     <label className="form-label" htmlFor="form12">
+                      Email:
+                    </label>
+                    <input
+                      onChange={handleInputValue}
+                      name="email"
+                      type="text"
+                      id="form12"
+                      value={customerInfo.customerInfor.email}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="col-6">
+                    <label className="form-label" htmlFor="form12">
+                      Address:
+                    </label>
+                    <input
+                      onInput={handleChangeLocation}
+                      name="address"
+                      type="text"
+                      id="form12"
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="col-6">
+                    <label className="form-label" htmlFor="form12">
                       Province:
                     </label>
                     <select
@@ -290,17 +342,17 @@ const AddCustomer = () => {
                       ))}
                     </select>
                   </div>
-                  <div className="col-6">
-                    <label className="form-label" htmlFor="form12">
-                      Address:
-                    </label>
-                    <input
-                      onChange={handleChangeLocation}
-                      name="address"
-                      type="text"
-                      id="form12"
-                      className="form-control"
-                    />
+                  <div className="col-6"></div>
+                  <div className="col-3 mt-3">
+                    <button className="btn btn-danger ">Reset</button>
+                  </div>
+                  <div className="col-3 mt-3">
+                    <button
+                      onClick={handleCreateCustomer}
+                      className="btn btn-success float-end"
+                    >
+                      Create Customer
+                    </button>
                   </div>
                 </div>
               </div>

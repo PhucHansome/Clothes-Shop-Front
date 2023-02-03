@@ -7,7 +7,7 @@ class customerInfoService {
   }
 
   static getCustomerInfoById(id) {
-    return axios.get(Page.urls.customer_info`/${id}`);
+    return axios.get(Page.urls.customer_info + '/' + id);
   }
 
   static doCreateCustomerInfo(customerInfo) {
@@ -19,7 +19,7 @@ class customerInfoService {
   }
 
   static doRemoveCustomerInfo(id) {
-    return axios.delete(Page.urls.customer_info`/${id}`);
+    return axios.delete(Page.urls.customer_info + '/' + id);
   }
 }
 
